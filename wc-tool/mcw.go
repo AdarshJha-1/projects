@@ -10,21 +10,6 @@ import (
 
 func main() {
 
-	// Complicated for me :(
-	/*
-	byteCountFlag := flag.String("c", "sample.txt", "outputs the number of bytes in a file.")
-	lineCountFlag := flag.String("l", "sample.txt", "outputs the numbers of line in a file.")
-	flag.Parse()
-
-	content, err := os.ReadFile(*byteCountFlag)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(*lineCountFlag)
-	fmt.Print ln(len(content), *byteCountFlag)
-	*/
-
 	if(len(os.Args) < 3) {
 		log.Fatal("not enough arguments")
 	}
@@ -33,14 +18,44 @@ func main() {
 	fileName := os.Args[2]
 
 	switch flag{
-		case "-c": 
-			content, err := os.ReadFile(fileName)
-			if err != nil {
+	case "-c": 
+		content, err := os.ReadFile(fileName)
+		if err != nil {
 			log.Fatal(err)	
+		}
+		fmt.Println(len(content), fileName)
+	case "-l":
+		content, err := os.ReadFile(fileName)
+		if err != nil {
+			log.Fatal(err)	
+		}
+		count := 0
+		for _, ch := range content {
+			if ch == '\n' {
+				count++
+			}	
+		}
+		fmt.Println(count, fileName)
+	case "-w":
+		content, err := os.ReadFile(fileName)
+		if err != nil {
+			log.Fatal(err)	
+		}
+		count := 0
+		inWord := false
+		for _, ch := range content {
+			if ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r' {
+				if inWord {
+					continue
+				} else{
+				inWord = true
+				count++;
+				}
+			} else {
+				inWord = false
 			}
-			fmt.Println(len(content), fileName)
-		case "-l":
-			
+		}
+		fmt.Println(count, fileName)
 	}
 
 }
