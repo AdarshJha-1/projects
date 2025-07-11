@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"unicode/utf8"
 )
 
 
@@ -50,6 +51,19 @@ func getNumberOfWords(fileName string) int {
 	}
 	return count
 }
+func getNumberOfCharacters(fileName string) int {
+	content, err := os.ReadFile(fileName)
+	if err != nil {
+		log.Fatal(err)	
+	}
+	count := 0
+	for len(content) > 0 {
+		_, s := utf8.DecodeRune(content)
+		content = content[s:]
+		count++
+	}
+	return count
+}
 
 func main() {
 
@@ -75,6 +89,9 @@ func main() {
 	case "-w":
 		words := getNumberOfWords(fileName)
 		fmt.Println(words, fileName)
+	case "-m":
+		characters := getNumberOfCharacters(fileName)
+		fmt.Println(characters, fileName)
 	default:
 		lines := getNumberOfLines(fileName)
 		words := getNumberOfWords(fileName)
